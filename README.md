@@ -66,7 +66,7 @@ if err != nil {<br>
     
 }
 
-defer file.Close()<
+defer file.Close()
 
 data, err := ReadData(file)
 
@@ -133,6 +133,27 @@ func getInput(r io.Reader, args ...string) (string, error) {<br>
 os.Stderr предоставляет стандартный способ отправки информации об ошибках на экран, будь то реальный экран пользователя, буфер ошибок, перенаправленный на устройство хранения и т.д.<br>
 
 В Go вы можете получить доступ к os.Stderr и использовать его для записи данных, например:<br>
+<br>
+<br>
+<br>
+<h1>тело таблицы</h1>
+Затем создается тело таблицы, в котором хранятся все задачи. В этом цикле используетсяrange для перебора всех задач в списке. В каждой итерации цикла создается новая строка, состоящая из пяти ячеек (для каждого столбца). В каждой ячейке добавляется текст, описывающий соответствующую задачу.
+
+go
+
+var cells [][]*simpletable.Cell
+
+for idx, item := range *t {
+
+	idx++
+	cells = append(cells, []*simpletable.Cell{
+		{Text: fmt.Sprintf("%d", idx)},
+		{Text: item.Task},
+		{Text: fmt.Sprintf("%t", item.Done)},
+		{Text: item.CreatedAt.Format(time.RFC822)},
+		{Text: item.CompletedAt.Format(time.RFC822)},
+	})
+}
 
 io.WriteString(os.Stderr, "Это ошибка\n")<br>
 Теперь вы знаете, что такое io.Reader и os.Stderr, и как их можно использовать в своих Go-программах.<br>
