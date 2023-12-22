@@ -96,7 +96,7 @@ func main() {
 func getInput(r io.Reader, args ...string) (string, error) {
 	//Если введено одно или более аргументов, возвращаем их склеенные через пробел
 	if len(args) > 0 {
-		return strings.Join(args, ""), nil
+		return strings.Join(args, " "), nil
 	}
 	//Если аргументов нет, создаем объект scanner для считывания введенного пользователем текста
 	scanner := bufio.NewScanner(r)

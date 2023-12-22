@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/alexeyco/simpletable"
 	"io/ioutil"
 	"os"
 	"time"
@@ -114,9 +115,66 @@ func (t *Todos) Store(filename string) error {
 
 // Метод Print для отображения списка todos на экране
 func (t *Todos) Print() {
-	// Используем цикл for с range для перебора каждого элемента в списке todos
-	for i, item := range *t {
-		// Используем fmt.Printf для печати индекса и задачи каждого элемента в списке todos
-		fmt.Printf("%d - %s\n", i, item.Task)
+	// Создаем новый экземпляр таблицы
+	table := simpletable.New()
+
+	//Затем настраивается шапка таблицы, добавляя заголовки для каждого столбца
+	table.Header = &simpletable.Header{
+		// Задаем данные для строки
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Text: "#"},
+			{Align: simpletable.AlignCenter, Text: "#Task"},
+			{Align: simpletable.AlignCenter, Text: "#Done?"},
+			{Align: simpletable.AlignCenter, Text: "#CreateAt"},
+			{Align: simpletable.AlignCenter, Text: "#CompletedAt"},
+		},
 	}
+	//в README есть обяснения
+	var cells [][]*simpletable.Cell
+
+	for idx, item := range *t {
+		idx++
+		task := blue(item.Task)
+		done := blue("no")
+
+		if item.Done {
+			task = green(fmt.Sprintf("\u2705 %s", item.Task))
+			done = green("yes")
+		}
+		cells = append(cells, *&[]*simpletable.Cell{
+			{Text: fmt.Sprintf("%d", idx)},
+			{Text: task},
+			{Text: done},
+			{Text: item.CreatedAt.Format(time.RFC822)},
+			{Text: item.CompletedAt.Format(time.RFC822)},
+		})
+
+	}
+	//в footer таблицы добавляется одна ячейка, содержащая текст
+	table.Body = &simpletable.Body{Cells: cells}
+	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
+		{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("you have %d pending todos", t.CountPending()))},
+	}}
+
+	table.SetStyle(simpletable.StyleUnicode)
+
+	table.Println()
+
+	//простой вариант
+	// Используем цикл for с range для перебора каждого элемента в списке todos
+	//for i, item := range *t {
+	//	// Используем fmt.Printf для печати индекса и задачи каждого элемента в списке todos
+	//	fmt.Printf("%d - %s\n", i, item.Task)
+	//}
+}
+
+func (t *Todos) CountPending() int {
+	total := 0
+
+	for _, item := range *t {
+		if !item.Done {
+			total++
+		}
+	}
+	return total
 }
