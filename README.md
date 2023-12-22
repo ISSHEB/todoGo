@@ -37,15 +37,15 @@ String: len функция возвращает количество байто�
 <h1>Пример функции, которая принимает io.Reader:<br></h1>
 <br>
 
-<br>
-
 	func ReadData(r io.Reader)([]byte, error) {
-    	var data []byte
-    	_, err := r.Read(data)
-    	if err != nil {
-	        return nil, err
-    	 }
-    	return data, nil
+	var data []byte
+     
+	_, err := r.Read(data)
+     
+	if err != nil {
+	return nil, err
+	}
+	return data, nil
 	}
 <br>
 <br>
@@ -55,15 +55,15 @@ String: len функция возвращает количество байто�
 
 	file, err := os.Open("data.txt") {
 	if err != nil {
-    	return err
-	 }
+	return err
+	}}
   
 	defer file.Close(){
 	data, err := ReadData(file)
 	if err != nil {
-   		return err
-    		}
-	}
+	return err
+	}}
+	
 <br>
 <br>
 
@@ -77,26 +77,24 @@ String: len функция возвращает количество байто�
 	//Если введено одно или более аргументов, возвращаем их склеенные через пробел
 	if len(args) > 0 {
  
-		return strings.Join(args, ""), nil
-  
+	return strings.Join(args, ""), nil
 	}
- 
+
 	//Если аргументов нет, создаем объект scanner для считывания введенного пользователем текста
-		scanner := bufio.NewScanner(r)
+	scanner := bufio.NewScanner(r)
  
 	 //Считываем текст и проверяем на наличие ошибок
-		scanner.Scan()
+	scanner.Scan()
  
 	if err := scanner.Err(); err != nil {
-		return "", err
+	return "", err
 	}
  
 	//Проверяем, не является ли введенный текст пустым, и возвращаем ошибку, если это так
 	text := scanner.Text()
  
 	if len(text) == 0 {
- 
-		return "", errors.New("задача не может быть пустым")
+	return "", errors.New("задача не может быть пустым")
 	}
 
 	// Возвращаем считанный текст без ошибок
