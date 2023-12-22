@@ -66,7 +66,7 @@ if err != nil {<br>
     
 }
 
-defer file.Close()<
+defer file.Close()
 
 data, err := ReadData(file)
 
